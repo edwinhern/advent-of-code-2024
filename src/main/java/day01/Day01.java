@@ -8,45 +8,61 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import com.opencsv.CSVReader;
-import com.opencsv.exceptions.CsvValidationException;
+import java.util.Map;
+import java.util.HashMap;
 
 public class Day01 {
 
-  public static void main(String[] args) throws IOException, CsvValidationException {
-    // read through the csv file
-    // iterate and create left and right list
-    List<List<String>> records = new ArrayList<>();
-    try (CSVReader csvReader = new CSVReader(new FileReader("src/main/resources/day01/input.csv"))) {
-      String[] values = null;
-      while ((values = csvReader.readNext()) != null) {
-        records.add(Arrays.asList(values));
-      }
-    }
-
+  public static void main(String[] args) throws IOException {
     List<Integer> left = new ArrayList<>();
     List<Integer> right = new ArrayList<>();
 
-    for (List<String> record : records) {
-      left.add(Integer.parseInt(record.get(0)));
-      right.add(Integer.parseInt(record.get(1)));
+    try (Scanner scanner = new Scanner(new FileReader("src/main/resources/day01/input.txt"))) {
+      while (scanner.hasNextLine()) {
+        String line = scanner.nextLine();
+        Scanner lineScanner = new Scanner(line);
+        lineScanner.useDelimiter("   ");
+        left.add(lineScanner.nextInt());
+        right.add(lineScanner.nextInt());
+
+        lineScanner.close();
+      }
+    }
+    
+    // Part 1: Calculate total distance between sorted lists
+    System.out.println("Part 1 Solution: " + part1(left, right));
+
+    // Part 2: Calculate similarity score
+    System.out.println("Part 2 Solution: " + part2(left, right));
+  }
+
+  private static int part1(List<Integer> left, List<Integer> right) {
+    List<Integer> sortedLeft = new ArrayList<>(left);
+    List<Integer> sortedRight = new ArrayList<>(right);
+    Collections.sort(sortedLeft);
+    Collections.sort(sortedRight);
+
+    int totalDistance = 0;
+    for(int i = 0; i < sortedLeft.size(); i++) {
+      totalDistance += Math.abs(sortedLeft.get(i) - sortedRight.get(i));
     }
 
-    // take first list and sort in asc
-    // take second list and sort in asc
-    Collections.sort(left);
-    Collections.sort(right);
+    return totalDistance;
+  }
 
-    // create sum variable to hold difference
-    int sum = 0;
-    // iterate through first list
-    for (int i = 0; i < left.size(); i++) {
-      // access left and right based on i
-      // sum += Math.abs(left[i] - right[i])
-      sum += Math.abs(left.get(i) - right.get(i));
+  private static int part2(List<Integer> left, List<Integer> right) {
+    Map<Integer, Integer> rightMap = new HashMap<>();
+    for(int num : right) {
+       rightMap.merge(num, 1, Integer::sum);
     }
 
-    System.out.println(sum);
+    int similarityScore = 0;
+    for(int num : left) {
+      if(rightMap.containsKey(num)) {
+        similarityScore += num * rightMap.getOrDefault(num, 0);
+      }
+    }
+
+    return similarityScore;
   }
 }
