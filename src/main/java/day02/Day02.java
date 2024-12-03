@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class Day02 {
   private static final Logger LOGGER = Logger.getLogger(Day02.class.getName());
@@ -18,9 +18,8 @@ public class Day02 {
     try (Scanner scanner = new Scanner(new FileReader("src/main/resources/day02/input.txt"))) {
       while (scanner.hasNextLine()) {
         String line = scanner.nextLine();
-        List<Integer> levels = Arrays.stream(line.split(" "))
-            .map(Integer::parseInt)
-            .collect(Collectors.toList());
+        List<Integer> levels =
+            Arrays.stream(line.split(" ")).map(Integer::parseInt).collect(Collectors.toList());
 
         reports.add(levels);
       }
@@ -30,9 +29,7 @@ public class Day02 {
   }
 
   private static int part1(List<List<Integer>> reports) {
-    return (int) reports.stream()
-        .filter(Day02::isSafeReport)
-        .count();
+    return (int) reports.stream().filter(Day02::isSafeReport).count();
   }
 
   private static boolean isSafeReport(List<Integer> levels) {
@@ -51,5 +48,4 @@ public class Day02 {
     }
     return true;
   }
-
 }

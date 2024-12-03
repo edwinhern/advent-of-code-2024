@@ -3,11 +3,10 @@ package day01;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.HashMap;
 import java.util.logging.Logger;
 
 public class Day01 {
@@ -39,8 +38,8 @@ public class Day01 {
   private static int part1(List<Integer> left, List<Integer> right) {
     List<Integer> sortedLeft = new ArrayList<>(left);
     List<Integer> sortedRight = new ArrayList<>(right);
-    Collections.sort(sortedLeft);
-    Collections.sort(sortedRight);
+    sortedLeft.sort(Integer::compareTo);
+    sortedRight.sort(Integer::compareTo);
 
     int totalDistance = 0;
     for (int i = 0; i < sortedLeft.size(); i++) {
