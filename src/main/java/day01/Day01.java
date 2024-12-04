@@ -1,4 +1,4 @@
-package day01;
+package Day01;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -16,7 +16,7 @@ public class Day01 {
     List<Integer> left = new ArrayList<>();
     List<Integer> right = new ArrayList<>();
 
-    try (Scanner scanner = new Scanner(new FileReader("src/main/resources/day01/input.txt"))) {
+    try (Scanner scanner = new Scanner(new FileReader("src/main/resources/Day01-Input.txt"))) {
       while (scanner.hasNextLine()) {
         String line = scanner.nextLine();
         Scanner lineScanner = new Scanner(line);

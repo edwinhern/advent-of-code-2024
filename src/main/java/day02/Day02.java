@@ -1,4 +1,4 @@
-package day02;
+package Day02;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -15,7 +15,7 @@ public class Day02 {
   public static void main(String[] args) throws IOException {
     List<List<Integer>> reports = new ArrayList<>();
 
-    try (Scanner scanner = new Scanner(new FileReader("src/main/resources/day02/input.txt"))) {
+    try (Scanner scanner = new Scanner(new FileReader("src/main/resources/Day02-Input.txt"))) {
       while (scanner.hasNextLine()) {
         String line = scanner.nextLine();
         List<Integer> levels =
