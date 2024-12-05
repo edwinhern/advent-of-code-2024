@@ -12,6 +12,8 @@ import java.util.regex.Pattern;
 public class Day03 {
   private static final Logger LOGGER = Logger.getLogger(Day03.class.getName());
   private static final Pattern PATTERN = Pattern.compile("mul\\((\\d+),(\\d+)\\)");
+  private static final Pattern PATTERN_2 = Pattern.compile("do\\(\\)");
+  private static final Pattern PATTERN_3 = Pattern.compile("don't\\(\\)");
 
   public static void main(String[] args) throws IOException {
     List<String> lines = new ArrayList<>();
@@ -28,13 +30,13 @@ public class Day03 {
     LOGGER.info(() -> "Part 2 Solution: " + part2(lines));
   }
 
-  private static int part1(List<String> lines) {
-    int sum = 0;
+  private static long part1(List<String> lines) {
+    long sum = 0;
 
-    for(String line : lines) {
+    for (String line : lines) {
       Matcher matcher = PATTERN.matcher(line);
 
-      while(matcher.find()) {
+      while (matcher.find()) {
         int x = Integer.parseInt(matcher.group(1));
         int y = Integer.parseInt(matcher.group(2));
         sum += x * y;
@@ -44,7 +46,30 @@ public class Day03 {
     return sum;
   }
 
-  private static int part2(List<String> lines) {
-    return 0;
+  private static long part2(List<String> lines) {
+    Pattern allPatterns = Pattern.compile(PATTERN.pattern() + "|" + PATTERN_2.pattern() + "|" + PATTERN_3.pattern());
+
+    long sum = 0;
+    boolean doEnabled = true;
+
+    for (String line : lines) {
+      Matcher matcher = allPatterns.matcher(line);
+
+      while (matcher.find()) {
+        String match = matcher.group();
+
+        if (PATTERN_3.matcher(match).matches()) {
+          doEnabled = false;
+        } else if (PATTERN_2.matcher(match).matches()) {
+          doEnabled = true;
+        } else if (doEnabled && PATTERN.matcher(match).matches()) {
+          int x = Integer.parseInt(matcher.group(1));
+          int y = Integer.parseInt(matcher.group(2));
+          sum += x * y;
+        }
+      }
+    }
+
+    return sum;
   }
 }
