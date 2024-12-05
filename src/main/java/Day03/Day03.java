@@ -47,7 +47,9 @@ public class Day03 {
   }
 
   private static long part2(List<String> lines) {
-    Pattern allPatterns = Pattern.compile(PATTERN.pattern() + "|" + PATTERN_2.pattern() + "|" + PATTERN_3.pattern());
+    Pattern allPatterns = Pattern.compile(PATTERN.pattern() +
+        "|" + PATTERN_2.pattern() +
+        "|" + PATTERN_3.pattern());
 
     long sum = 0;
     boolean doEnabled = true;
