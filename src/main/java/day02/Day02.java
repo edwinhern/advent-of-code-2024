@@ -18,7 +18,9 @@ public class Day02 {
     try (Scanner scanner = new Scanner(new FileReader("src/main/resources/Day02-Input.txt"))) {
       while (scanner.hasNextLine()) {
         String line = scanner.nextLine();
-        List<Integer> levels = Arrays.stream(line.split(" ")).map(Integer::parseInt).collect(Collectors.toList());
+        List<Integer> levels = Arrays.stream(line.split(" "))
+            .map(Integer::parseInt)
+            .collect(Collectors.toList());
 
         reports.add(levels);
       }
