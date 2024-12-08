@@ -18,10 +18,11 @@ public class Day04 {
     char[][] board = readInput();
 
     LOGGER.info(() -> "Part 1 Solution: " + part1(board));
+    LOGGER.info(() -> "Part 2 Solution: " + part2(board));
   }
 
   private static long part1(char[][] board) {
-    int counter = 0;
+    long counter = 0;
     int rows = board.length;
     int cols = board[0].length;
 
@@ -36,8 +37,43 @@ public class Day04 {
     return counter;
   }
 
-  private static int countValidDirections(char[][] board, int row, int col) {
-    int count = 0;
+  private static long part2(char[][] board) {
+    long count = 0;
+    int rows = board.length;
+    int cols = board[0].length;
+
+    for (int i = 1; i < rows - 1; i++) {
+      for (int j = 1; j < cols - 1; j++) {
+        if (board[i][j] == 'A') { // Check for 'A' to be in the center
+          // Check diagonal 1 (top-left to bottom-right)
+          char topLeft = board[i - 1][j - 1];
+          char bottomRight = board[i + 1][j + 1];
+          boolean diagonal1 = hasValidDiagonal(topLeft, bottomRight) ||
+              hasValidDiagonal(bottomRight, topLeft);
+
+          // Check diagonal 2 (top-right to bottom-left)
+          char topRight = board[i - 1][j + 1];
+          char bottomLeft = board[i + 1][j - 1];
+          boolean diagonal2 = hasValidDiagonal(topRight, bottomLeft) ||
+              hasValidDiagonal(bottomLeft, topRight);
+
+          // Only count if we have valid diagonals in BOTH directions
+          if (diagonal1 && diagonal2) {
+            count++;
+          }
+        }
+      }
+    }
+
+    return count;
+  }
+
+  private static boolean hasValidDiagonal(char start, char end) {
+    return start == 'M' && end == 'S'; // Checks for forward direction (M->A->S)
+  }
+
+  private static long countValidDirections(char[][] board, int row, int col) {
+    long count = 0;
     for (int[] direction : DIRECTIONS) {
       if (isValidDirection(board, row, col, direction[0], direction[1])) {
         count++;
