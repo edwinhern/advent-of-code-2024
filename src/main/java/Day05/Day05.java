@@ -16,19 +16,16 @@ public class Day05 {
 
   public static void main(String[] args) {
     LOGGER.info(() -> "Part 1 Solution: " + part1());
-    LOGGER.info(() -> "Part 2 Solution: ");
+    LOGGER.info(() -> "Part 2 Solution: " + part2());
   }
 
   private static long part1() {
     Input input = readInput();
     long sum = 0;
 
-    System.out.println(input.beforeMap.size());
-    System.out.println(input.updates.size());
-
     // Check each update sequence
     for (List<Integer> update : input.updates) {
-      if (isValidOrder(update, input.beforeMap)) {
+      if (isValidSequence(update, input.beforeMap)) {
         int middleIndex = (int) Math.floor(update.size() / 2);
         sum += update.get(middleIndex);
       }
@@ -37,7 +34,57 @@ public class Day05 {
     return sum;
   }
 
-  private static boolean isValidOrder(List<Integer> sequence, Map<Integer, Set<Integer>> beforeMap) {
+  private static long part2() {
+    Input input = readInput();
+    long sum = 0;
+
+    // Process only invalid sequences
+    for (List<Integer> update : input.updates) {
+      if (!isValidSequence(update, input.beforeMap)) {
+        List<Integer> sorted = sortSequence(new ArrayList<>(update), input.beforeMap);
+        int middleIndex = sorted.size() / 2;
+        sum += sorted.get(middleIndex);
+      }
+    }
+
+    return sum;
+  }
+
+  private static List<Integer> sortSequence(List<Integer> sequence, Map<Integer, Set<Integer>> beforeMap) {
+    List<Integer> result = new ArrayList<>();
+    Set<Integer> used = new HashSet<>();
+
+    while (result.size() < sequence.size()) {
+      Integer best = null;
+      for (Integer num : sequence) {
+        if (used.contains(num)) {
+          continue;
+        }
+
+        // Check if all required numbers are already in result
+        boolean canUse = true;
+        if (beforeMap.containsKey(num)) {
+          for (Integer required : beforeMap.get(num)) {
+            if (sequence.contains(required) && !used.contains(required)) {
+              canUse = false;
+              break;
+            }
+          }
+        }
+
+        if (canUse && (best == null || num < best)) {
+          best = num;
+        }
+      }
+
+      result.add(best);
+      used.add(best);
+    }
+
+    return result;
+  }
+
+  private static boolean isValidSequence(List<Integer> sequence, Map<Integer, Set<Integer>> beforeMap) {
     // For each number in the sequence
     for (int i = 0; i < sequence.size(); i++) {
       int current = sequence.get(i);
